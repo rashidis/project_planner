@@ -1,5 +1,6 @@
 from langchain.prompts import ChatPromptTemplate
 
+
 TASK_EXTRACTION_PROMPT = ChatPromptTemplate.from_template(
     """
 You are an AI assistant designed to break down marketing and team conversations
@@ -14,15 +15,17 @@ Your output must:
 Chat Log:
 {chat_log}
 
-Please analyze the conversation and extract tasks in the following JSON structure:
-*tasks
-with each task having the structure as:
-
-**"description": "Task description",
-**"deadline": "Task deadline",
-** "assignee": "Task assignee",
-** "other_details": "Other task-specific details"
-
+Please analyse the conversation and extract tasks in the following JSON structure:
+{{
+    "tasks": [
+        {{
+            "description": "Task description",
+            "deadline": "Task deadline",
+            "assignee": "Task assignee",
+            "other_details": "Other task-specific details"
+        }}
+    ]
+}}
 
 Ensure each task has all required fields filled out, using "Not specified" if information is missing.
 """
