@@ -3,7 +3,7 @@ from typing import Literal, TypedDict
 from langgraph.graph import StateGraph
 
 from nodes import extract_tasks, summarise, start
-from states import AgentState
+from states import ExecutorState
 
 
 class GraphConfig(TypedDict):
@@ -16,7 +16,7 @@ class GraphConfig(TypedDict):
     model_name: Literal["openai", "anthropic"]
 
 
-workflow = StateGraph(AgentState)
+workflow = StateGraph(ExecutorState)
 workflow.add_node("start", start)
 workflow.add_node("task_extractor", extract_tasks)
 workflow.add_node("summariser", summarise)

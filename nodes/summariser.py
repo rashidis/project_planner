@@ -1,19 +1,19 @@
 from langchain_core.messages import SystemMessage
 
 from prompts import SUMMARISER_PROMPT
-from states import AgentState
+from states import ExecutorState
 
 from .utils import _get_model
 
 
-def summarise(state: AgentState, config: dict) -> AgentState:
+def summarise(state: ExecutorState, config: dict) -> ExecutorState:
     """This function is used tosummarise the meeting highlights from the text.
 
     :param state: The state of the agent.
     :param config: The configuration of the agent.
     :return: The tasks extracted from the text.
     """
-    chat_log = state["messages"][-1]
+    chat_log = state["chat_log"]
     print(chat_log)
 
     model_name = config.get("configurable", {}).get("model_name", "openai")
