@@ -1,7 +1,9 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "executor": "./agents/executor.py:executor_graph"
+    "executor": "./agents/executor.py:executor_graph",
+    "planner": "./agents/planner.py:planner_graph"
+
   },
   "env": ".env"
 }
