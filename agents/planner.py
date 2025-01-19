@@ -1,8 +1,7 @@
-from typing import Literal, TypedDict
-
 from langgraph.graph import StateGraph, END
 from langgraph.types import Command
 
+from settings import GraphConfig
 from nodes import generate, plan
 from states import PlannerState
 from agents import executor_graph
@@ -27,17 +26,7 @@ def call_executor_graph(planner_state: PlannerState) -> Command:
     )
 
 
-class GraphConfig(TypedDict):
-    """Configuration type for the graph workflow.
-
-    This TypedDict defines the configuration schema for the workflow graph,
-    specifying which language model to use for the agent.
-    """
-
-    model_name: Literal["openai", "anthropic"]
-
-
-workflow = StateGraph(PlannerState)
+workflow = StateGraph(PlannerState, config_schema=GraphConfig)
 workflow.add_node("planner", plan)
 workflow.add_node("executor_graph", call_executor_graph)
 workflow.add_node("generator", generate)

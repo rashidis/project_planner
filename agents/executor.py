@@ -1,22 +1,11 @@
-from typing import Literal, TypedDict
-
 from langgraph.graph import StateGraph
 
+from settings import GraphConfig
 from nodes import extract_tasks, summarise, start
 from states import ExecutorState
 
 
-class GraphConfig(TypedDict):
-    """Configuration type for the graph workflow.
-
-    This TypedDict defines the configuration schema for the workflow graph,
-    specifying which language model to use for the agent.
-    """
-
-    model_name: Literal["openai", "anthropic"]
-
-
-workflow = StateGraph(ExecutorState)
+workflow = StateGraph(ExecutorState, config_schema=GraphConfig)
 workflow.add_node("start", start)
 workflow.add_node("task_extractor", extract_tasks)
 workflow.add_node("summariser", summarise)
