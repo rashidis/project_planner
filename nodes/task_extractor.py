@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import TypedDict, Literal
 
 from langchain_core.messages import SystemMessage
 
@@ -10,8 +10,10 @@ from .utils import _get_model
 
 class Task(TypedDict):
     description: str
+    status: Literal["backlog", "ready_to_work", "in_progress"]
     deadline: str
     assignee: str
+    task_updates: str
     other_details: str
 
 
