@@ -1,7 +1,7 @@
 # AI Project Planner
 
 ## Overview
-The project is an intelligent AI-powered assistant designed to revolutionize marketing operations by automating administrative tasks and enhancing team efficiency. This project showcases a lightweight proof of concept (POC) to demonstrate Pip’s capabilities.
+The project is an intelligent AI-powered assistant designed to revolutionise marketing operations by automating administrative tasks and enhancing team efficiency. This project showcases a lightweight proof of concept (POC) to demonstrate Pip’s capabilities.
 
 ---
 
@@ -24,7 +24,7 @@ This project was developed as part of an interview process to envision and proto
 
 ### Enhanced Team Efficiency
 - Notes are synced to project plans automatically.
-- Updates happen in real-time and are centralized in one location.
+- Updates happen in real-time and are centralised in one location.
 - Action items are tracked without manual intervention.
 - All platform activity is converted into actionable data.
 
@@ -81,5 +81,5 @@ The POC demonstrates an end-to-end flow for Pip’s functionality. It includes:
 
 ---
 
-## Acknowledgments
+## Acknowledgements
 This project was created as part of an interview and is a demonstration of the potential for AI-driven marketing operations assistance.

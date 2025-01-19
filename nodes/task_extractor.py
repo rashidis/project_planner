@@ -1,4 +1,4 @@
-from typing import List, TypedDict
+from typing import TypedDict
 
 from langchain_core.messages import SystemMessage
 
@@ -32,8 +32,12 @@ def extract_tasks(state: AgentState, config: dict) -> AgentState:
     model_name = config.get("configurable", {}).get("model_name", "openai")
     model = _get_model(model_name)
 
-    messages = [SystemMessage(content=TASK_EXTRACTION_PROMPT.format(chat_log=chat_log))]
-    response = model.with_structured_output(TaskExtractorOutput).invoke(messages)
+    messages = [
+        SystemMessage(content=TASK_EXTRACTION_PROMPT.format(chat_log=chat_log))
+    ]
+    response = model.with_structured_output(TaskExtractorOutput).invoke(
+        messages
+    )
 
     print(response)
 
