@@ -1,10 +1,10 @@
 from loguru import logger
-from typing import TypedDict
+from typing import TypedDict, Literal
 from langgraph.types import Command
 from langchain_core.messages import SystemMessage
 
 from states import PlannerState
-from prompts import GENERATOR_PROMPT, SUGGESTOR_PROMPT
+from prompts import GENERATOR_PROMPT, SUGGESTOR_PROMPT, INTENT_DETECTION_PROMPT
 from .utils import _get_model, retriever_tool
 
 
@@ -15,6 +15,10 @@ class Improvement(TypedDict):
 
 class SuggestorOutput(TypedDict):
     improvements: list[Improvement]
+
+
+class IntentDetectionOutput(TypedDict):
+    intent: Literal["generic", "followup"]
 
 
 def plan(state: PlannerState, config: dict) -> Command:
@@ -34,8 +38,21 @@ def plan(state: PlannerState, config: dict) -> Command:
     logger.info(
         f"[plan node] chat_log not detected, calling generator to generate a response"
     )
-    instruction = "generate a response to user questions"
+    instruction = "Output a response to user question."
     return Command(goto="generator", update={"instruction": instruction})
+
+
+def intent_dection(model, user_message: str) -> str:
+    """A small agent to do an intent_detection between geenric and followup questions
+
+    :param model: the llm model as the agent
+    :param user_message: the user query to be classified
+    :return: the user intent"""
+    intent = model.with_structured_output(IntentDetectionOutput).invoke(
+        INTENT_DETECTION_PROMPT.format(query=user_message)
+    )["intent"]
+    logger.info(f"intent is {intent}")
+    return str(intent).lower()
 
 
 def generate(state: PlannerState, config: dict) -> PlannerState:
@@ -44,29 +61,46 @@ def generate(state: PlannerState, config: dict) -> PlannerState:
     :param state: The state of the agent.
     :return: The state of the agent with the added response
     """
-    instruction = state.get("instruction", "")
     user_message = state["messages"][-1]  # last message is the user input
+    instruction = state.get("instruction", "")
     tasks = state.get("tasks", "")
     summary = state.get("tasks", "")
     improvements = state.get("improvements", "")
-
+    logger.info(f"[tasksk]{tasks}")
     model_name = config.get("configurable", {}).get("model_name", "openai")
     model = _get_model(model_name)
 
-    response = model.invoke(
-        [
-            {
-                "role": "system",
-                "content": GENERATOR_PROMPT.format(
-                    user_message=user_message,
-                    instruction=instruction,
-                    tasks=tasks,
-                    summary=summary,
-                    improvements=improvements,
-                ),
-            }
-        ]
-    )
+    intent = intent_dection(model, user_message)
+
+    if intent == "followup" or not tasks:
+        logger.info(
+            "[generate node] the user query intent in followup, outputting a followup response"
+        )
+        response = model.invoke(
+            [
+                {
+                    "role": "system",
+                    "content": GENERATOR_PROMPT.format(
+                        user_message=user_message,
+                        instruction=instruction,
+                        tasks=tasks,
+                        summary=summary,
+                        improvements=improvements,
+                    ),
+                }
+            ]
+        )
+    elif intent == "generic" or tasks:
+        logger.info(
+            "[generate node] the user query intent in generic, outputting a generic response"
+        )
+        logger.info(
+            f"[generate node] {instruction + ' : ' + user_message.content}"
+        )
+        response = model.invoke(
+            [{"role": "system", "content": instruction + user_message.content}]
+        )
+
     logger.info(f"[generate node] response is {response}")
     return {"messages": [response]}
 

@@ -3,7 +3,8 @@ from langchain.prompts import ChatPromptTemplate
 
 GENERATOR_PROMPT = ChatPromptTemplate.from_template(
     """
-You are an advanced AI assistant You are an AI assistant specialised in summarising meeting discussions.
+You are an advanced AI assistant specialised in providing insights from meeting discussions.
+
 based on the chat logs. Use the following inputs:
 
 1. **User Message:** The main query or message from the user.
@@ -23,6 +24,7 @@ based on the chat logs. Use the following inputs:
 1. Use the given inputs to generate a coherent and relevant response.
 2. Incorporate the tasks and summary where applicable to ensure the response aligns with the user message and instruction.
 3. Be concise, accurate, and actionable in your response.
+4. If the tasks, summary and improvements are not provided, provide a geenric response to user's query.
 
 Now, generate the response based on the above details.
 If the user question is a general question and not related to the meeting and tasks, just respond to it.
@@ -54,3 +56,22 @@ Output format:
 Make sure your suggestions are concise, easy to understand, and aligned with the project goals.
 """
 )
+
+
+INTENT_DETECTION_PROMPT = """You are an AI assistant tasked with determining if a user's question is a generic query or a follow-up question related to the system's previous outputs.
+
+A follow-up question would be any query that:
+1. References previously generated tasks or action items
+2. Asks about improvement suggestions made earlier
+3. Requests clarification about meeting summaries
+4. Mentions specific details from previous system responses
+5. Builds upon or seeks to modify earlier generated content
+
+Classify the user query as either:
+- 'generic': A standalone question not related to previous system outputs
+- 'followup': A question that references or builds upon previous system outputs
+
+User Query: {query}
+
+Output format must be either 'generic' or 'followup'.
+"""
