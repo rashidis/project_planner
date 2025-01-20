@@ -8,6 +8,7 @@ class PlannerState(MessagesState):
     summary: str
     instruction: str
     generated_output: str
+    improvements: list
 
 
 class ExecutorState(TypedDict):
