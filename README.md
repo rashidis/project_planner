@@ -1,85 +1,107 @@
 # AI Project Planner
 
-## Overview
-The project is an intelligent AI-powered assistant designed to revolutionise marketing operations by automating administrative tasks and enhancing team efficiency. This project showcases a lightweight proof of concept (POC) to demonstrate Pip’s capabilities.
+An intelligent AI-powered assistant designed to streamline project planning and team collaboration through automated task extraction and smart suggestions.
 
----
+## Features
 
-## Project Context
-This project was developed as part of an interview process to envision and prototype an AI partner for marketing operations. The goal is to illustrate AI's ability to streamline workflows by using multi-agentic systems.
+- **Automated Task Extraction**: Converts meeting transcripts and chat logs into structured task lists
+- **Smart Summarization**: Generates concise meeting summaries with key points and decisions
+- **Improvement Suggestions**: Provides actionable recommendations based on historical project data
+- **Multi-Model Support**: Works with both OpenAI and Anthropic models
+- **RAG Integration**: Leverages Pinecone for context-aware responses
 
----
+## Prerequisites
 
-## Success Metrics
-### Seamless Platform Integration
-- Video calls automatically generate transcripts and action items.
-- Messages flow directly into project plans.
-- Real-time collaboration feeds into Pip’s learning to refine future interactions.
+- Python 3.11+
+- Poetry for dependency management
+- Pinecone API key
+- OpenAI or Anthropic API key
 
-### Intelligent Automation
-- Conversations are transformed into structured task lists.
-- Chat messages become project updates.
-- Meeting discussions yield clear summaries and next steps.
-- Platform activity informs project recommendations automatically.
+## Installation
 
-### Enhanced Team Efficiency
-- Notes are synced to project plans automatically.
-- Updates happen in real-time and are centralised in one location.
-- Action items are tracked without manual intervention.
-- All platform activity is converted into actionable data.
-
----
-
-## Challenge: Build a POC
-The POC demonstrates an end-to-end flow for Pip’s functionality. It includes:
-1. **Input:** A marketing team’s video call transcript or chat conversation.
-2. **Processing:** Intelligent parsing and structuring of the information.
-3. **Output:** Work products such as tasks, updates, and summaries.
-4. **Interface:** A clear and intuitive way for teams to interact with these outputs.
-
----
-
-## How to Run
-### Prerequisites
-- Python 3.8+
-- Install dependencies:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- (Optional) Set up API keys for any external transcription or messaging services used.
-
-### Steps
 1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd <repository-directory>
-   ```
-2. Run the POC script:
-   ```bash
-   python main.py
-   ```
-3. Provide an example input (e.g., a transcript or chat log) and observe the output.
-
-### Example Input
-**Chat Log:**
 ```
-[9:23 AM] Client 1: Let’s start on the customer success stories section with 5-6 examples across industries.
-[10:15 AM] Content Specialist: Scheduling interviews next week.
+git clone <repository-url>
+cd ai-project-planner
 ```
 
-### Example Output
-**Tasks Generated:**
-- Identify 5-6 customer stories spanning industries.
-- Schedule interviews for customer success stories next week.
+2. Install dependencies using Poetry:
+```
+poetry install
+```
 
----
+3. Set up environment variables:
+```
+export PINECONE_API_KEY="your-key-here"
+export OPENAI_API_KEY="your-key-here" # or ANTHROPIC_API_KEY
+```
 
-## Roadmap
-- **Short-Term:** Refine Pip’s ability to process and structure diverse input formats.
-- **Mid-Term:** Integrate Pip with marketing platforms for seamless automation.
-- **Long-Term:** Leverage machine learning to enable real-time collaboration and proactive recommendations.
+## Usage
+This system provides two main functionalities for processing text data:
 
----
+1. **Task Extraction Mode**: Extracts tasks and action items from a meeting transcript or chat log.
+2. **Planning Mode**: Facilitates planning based on a given query or set of messages.
 
-## Acknowledgements
-This project was created as part of an interview and is a demonstration of the potential for AI-driven marketing operations assistance.
+### 1. Task Extraction Mode
+Extract actionable tasks and insights from a meeting transcript or chat log.
+
+#### Example:
+```python
+from agents import executor_graph
+
+# Replace with your meeting transcript or chat log
+chat_log = "your meeting transcript or chat log here"
+
+# Invoke the task extraction process
+result = executor_graph.invoke({
+    "chat_log": chat_log
+})
+
+# Print or process the result
+print(result)
+```
+
+### 2. Planning Mode
+Generate plans or solutions based on a provided query or list of messages.
+
+#### Example:
+```python
+from agents import planner_graph
+
+# Replace with your query or list of messages
+messages = ["your query here"]
+
+# Invoke the planning process
+result = planner_graph.invoke({
+    "messages": messages
+})
+
+# Print or process the result
+print(result)
+```
+
+
+## Project Structure
+
+- `agents/`: Core agent implementations for planning and execution
+- `nodes/`: Individual processing nodes for tasks, summaries, and suggestions
+- `prompts/`: System prompts and templates
+- `states/`: State management and type definitions
+- `rag_store/`: Document storage and retrieval functionality
+
+## Development
+
+This project uses several tools to maintain code quality:
+
+- Black for code formatting
+- isort for import sorting
+- pre-commit hooks for automated checks
+- Poetry for dependency management
+
+
+## License
+
+MIT License - See LICENSE file for details
+
+## Author
+Shima Rashidi <shima.rashidi7@gmail.com>
