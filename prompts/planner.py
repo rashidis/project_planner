@@ -62,10 +62,11 @@ INTENT_DETECTION_PROMPT = """You are an AI assistant tasked with determining if 
 
 A follow-up question would be any query that:
 1. References previously generated tasks or action items
-2. Asks about improvement suggestions made earlier
+2. Asks about the improvement suggestions made, tasks generated, and summary created
 3. Requests clarification about meeting summaries
 4. Mentions specific details from previous system responses
 5. Builds upon or seeks to modify earlier generated content
+6. asks questions about the project, project plan, deadlines, tasks
 
 Classify the user query as either:
 - 'generic': A standalone question not related to previous system outputs
