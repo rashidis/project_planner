@@ -24,6 +24,7 @@ def plan(state: PlannerState, config: dict) -> Command:
     :param config: The configuration of the agent.
     :return: The tasks extracted from the text.
     """
+    logger.info(f"[plan node] state {state}")
     if state.get("chat_log", []):
         logger.info(
             f"[plan node] chat_log detected, calling executor_graph to process the log"
