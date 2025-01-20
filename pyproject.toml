@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "project_planner"
 version = "0.1.0"
-description = "An AI assistent for project planning"
+description = "An AI assistant for project planning"
 authors = [
     "Shima Rashidi <shima.rashidi7@gmail.com>"
 ]
@@ -19,6 +19,8 @@ tavily-python = "^0.3.0"
 langchain_community = "^0.2.0"
 pre-commit = "^4.0.1"
 loguru = "^0.7.2"
+pinecone = "^5.4.2"
+pinecone-plugin-assistant = "^1.1.0"
 
 [build-system]
 requires = ["poetry-core"]
