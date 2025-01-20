@@ -1,4 +1,6 @@
 from functools import lru_cache
+from loguru import logger
+import os
 
 from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
@@ -23,17 +25,23 @@ def _get_model(model_name: str):
     return model
 
 
-def should_continue(state):
-    """This function is used to determine whether to continue or not.
+from pinecone import Pinecone
+from pinecone_plugins.assistant.models.chat import Message
 
-    :param state: The state of the agent.
-    :return: Whether to continue or not.
+pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
+assistant = pc.assistant.Assistant(assistant_name="projectretriver")
+
+
+def retriever_tool(query: str) -> str:
+    """retriever tool which uses a pinecone assistant to respond to the query based on stored documents
+
+    :param query: input query
+    :return: response generated from the rag system
     """
-    messages = state["messages"]
-    last_message = messages[-1]
-    # If there are no tool calls, then we finish
-    if not last_message.tool_calls:
-        return "end"
-    # Otherwise continue
-    else:
-        return "continue"
+    logger.info(f"[retriever_tool] query is:{query}")
+
+    msg = Message(content=str(query))
+    resp = assistant.chat(messages=[msg])
+    logger.info(f"[retriever_tool] resp is:{resp}")
+
+    return resp["message"]["content"]
