@@ -2,6 +2,20 @@
 
 An intelligent AI-powered assistant designed to streamline project planning and team collaboration through automated task extraction and smart suggestions.
 
+The system contains two agentic graphs, one planner, and one executer.
+
+- If a chat_log is provided for the system, the planner will call the executer to execute the following tasks:
+   - generate tasks from the chat_log with specific details like assignee, deadline, status and ... 
+   - generate a summary and next steps from the chat logs.
+
+   once the tasks and summary are created, planner will call suggestor. 
+   - The suggestor is connected to a retrieval node which uses a pinecone assistant with some gpt generated points of improvement (these docs are going to act as a repository of previous projects info). It will retrieve points of improvement per task (based on similarity of the task and chunks in the docs)
+   - will use the tasks and summary and retrieved results to output points of improvements on the current plan. 
+
+- If a user message is provided to the systemThe planner first makes an intent detection to distinguish between generic and followup questions. 
+   - If generic, goes to generator for a general response directly. 
+   - if follow-up, uses the generated tasks, summary and improvement points to provide follow up response
+
 ## Features
 
 - **Automated Task Extraction**: Converts meeting transcripts and chat logs into structured task lists
@@ -38,12 +52,14 @@ An intelligent AI-powered assistant designed to streamline project planning and 
    ```
 
 ## Usage
+First you need to run the `rag_store/store.py` store the documents in the **Pinecone** vector-store. Then you can run the agentic system for processing chat logs or responding to general questions.
+
 ### Using LangGraph Studio
  You can load this repository into LangGraph Studio to visualise and interact with the sample agent.
 
 ### Without LangGraph Studio
 If you can't use LangGraph Studio, there's a `local_run.py` script to interact with the agent directly.
-You just need to run `local_run.py`
+You just need to run `local_run.py`.
 
 You need to take the following steps for setup:
 
@@ -66,7 +82,7 @@ Once the containers are running you can use the `local_run.py` to prompt the age
 2. **Planning Mode**: Facilitates planning based on a given query or set of messages.
 
 
-### 1. General model
+### 1. General mode
 Respond to general or followup questions if the tasks are already generated.
 
 #### Example:
@@ -104,6 +120,7 @@ This project uses several tools to maintain code quality:
 - pre-commit hooks for automated checks
 - Poetry for dependency management
 
+Tests are also included under tests folder.
 
 ## License
 
