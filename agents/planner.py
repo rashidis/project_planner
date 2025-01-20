@@ -1,8 +1,8 @@
-from langgraph.graph import StateGraph, END
+from langgraph.graph import StateGraph
 from langgraph.types import Command
 
 from settings import GraphConfig
-from nodes import generate, plan
+from nodes import generate, plan, suggest
 from states import PlannerState
 from agents import executor_graph
 
@@ -17,7 +17,7 @@ def call_executor_graph(planner_state: PlannerState) -> Command:
     executor_graph_output = executor_graph.invoke(executor_graph_input)
 
     return Command(
-        goto=END,
+        goto="suggestor",
         update={
             "tasks": executor_graph_output["tasks"],
             "summary": executor_graph_output["summary"],
@@ -30,6 +30,7 @@ workflow = StateGraph(PlannerState, config_schema=GraphConfig)
 workflow.add_node("planner", plan)
 workflow.add_node("executor_graph", call_executor_graph)
 workflow.add_node("generator", generate)
+workflow.add_node("suggestor", suggest)
 
 
 workflow.set_entry_point("planner")
